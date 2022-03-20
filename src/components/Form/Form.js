@@ -18,14 +18,6 @@ export default class Form extends Component {
                 deleteFunc: this.deleteItem,
             }]
         }
-        // this.state = {
-        //     listOfClocks: ([<Watch
-        //         key={shortid.generate()}
-        //         zone={this.state.zone}
-        //         name={this.state.name}
-        //         deleteFunc={this.deleteItem}
-        //     />])
-        // }
     }
 
     renderOptions() {
@@ -61,12 +53,12 @@ export default class Form extends Component {
                 error: {display: "block"}
             })
         } else {
-            this.state.listOfClocks.push(<Watch
-                key={shortid.generate()}
-                zone={this.state.zone}
-                name={this.state.name}
-                deleteFunc={this.deleteItem}
-            />);
+            this.state.listOfClocks.push({
+                key: shortid.generate(),
+                zone: this.state.zone,
+                name: this.state.name,
+                deleteFunc: this.deleteItem,
+        });
             this.setState({
                 zone: this.zoneTemplate,
                 name: "",
