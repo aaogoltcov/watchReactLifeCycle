@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import './App.css';
-import Watch from "./components/Watch/Watch";
 import Form from "./components/Form/Form";
 
 function App() {
@@ -357,6 +355,7 @@ function App() {
 
     return (
         <>
+            <link rel="shortcut icon" href="logo.svg" />
             <Form zones={zones}/>
         </>
     );

@@ -6,25 +6,39 @@ import './Form.css';
 export default class Form extends Component {
     constructor(props) {
         super(props);
-        this.props = props;
         this.zoneTemplate = "Выберите...";
         this.state = {
             zone: undefined,
             name: undefined,
             error: {display: "none"},
+            listOfClocks: [{
+                key: shortid.generate(),
+                zone: undefined,
+                name: undefined,
+                deleteFunc: this.deleteItem,
+            }]
         }
-        this.state = {
-            listOfClocks: [<Watch
-                key={shortid.generate()}
-                zone={this.state.zone}
-                name={this.state.name}
-                deleteFunc={this.deleteItem}
-            />]
-        }
+        // this.state = {
+        //     listOfClocks: ([<Watch
+        //         key={shortid.generate()}
+        //         zone={this.state.zone}
+        //         name={this.state.name}
+        //         deleteFunc={this.deleteItem}
+        //     />])
+        // }
     }
 
     renderOptions() {
         return this.props.zones.map(item => <option key={shortid.generate()} value={item}>{item}</option>);
+    }
+
+    renderClocks() {
+        return this.state.listOfClocks.map(clock => <Watch
+            key={clock.key}
+            zone={clock.zone}
+            name={clock.name}
+            deleteFunc={this.deleteItem}
+        />)
     }
 
     selectChangeHandler = event => {
@@ -41,22 +55,23 @@ export default class Form extends Component {
 
     clickButtonHandler = event => {
         event.preventDefault();
+        console.log("zone: ", this.state.zone, "name: ", this.state.name);
         if (!this.state.zone || !this.state.name || this.state.zone === this.zoneTemplate) {
             this.setState({
                 error: {display: "block"}
             })
         } else {
-            this.setState({
-                zone: this.zoneTemplate,
-                name: "",
-                error: {display: "none"},
-            })
             this.state.listOfClocks.push(<Watch
                 key={shortid.generate()}
                 zone={this.state.zone}
                 name={this.state.name}
                 deleteFunc={this.deleteItem}
             />);
+            this.setState({
+                zone: this.zoneTemplate,
+                name: "",
+                error: {display: "none"},
+            })
         }
     }
 
@@ -94,7 +109,7 @@ export default class Form extends Component {
                                         type="text"
                                         className="form-control"
                                         placeholder="Название"
-                                        defaultValue={this.state.name}
+                                        value={this.state.name}
                                         onChange={this.nameChangeHandler}
                                         required={true}
                                     />
@@ -111,7 +126,7 @@ export default class Form extends Component {
                     </div>
                 </form>
                 <div>
-                    {this.state.listOfClocks}
+                    {this.renderClocks()}
                 </div>
             </>
         );

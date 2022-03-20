@@ -8,24 +8,44 @@ export default class Watch extends Component {
         this.clockEngine = new ClockEngine();
         this.date = this.getTimeWithZone();
         this.state = {
-            hour: {transform: `rotate(${this.clockEngine.getHour(this.date)}deg)`},
-            minute: {transform: `rotate(${this.clockEngine.getMinute(this.date)}deg)`},
-            second: {transform: `rotate(${this.clockEngine.getSecond(this.date)}deg)`},
+            hour: {transform: this.transformStyle(this.date, 'hour')},
+            minute: {transform: this.transformStyle(this.date, 'minute')},
+            second: {transform: this.transformStyle(this.date)},
         }
         this.interval = 1000;
+    }
+
+    transformStyle(date, type='second') {
+        if (type === 'hour') {
+            return `rotate(${this.clockEngine.getHour(date)}deg)`;
+        } else if (type === 'minute') {
+            return `rotate(${this.clockEngine.getMinute(date)}deg)`;
+        } else if (type === 'second') {
+            return `rotate(${this.clockEngine.getSecond(date)}deg)`;
+        } else {
+            console.log('Error with transform style date type');
+        }
     }
 
     getTimeWithZone() {
         return new Date((new Date()).toLocaleString("en-EN", {timeZone: this.props.zone}));
     }
 
+    intervalHandler(type='end') {
+        if (type=== 'start') {
+            this.clock();
+        } else {
+            clearInterval(this.intervalFunc);
+        }
+    }
+
     clock() {
-        this.interval = setInterval(() => {
+        this.intervalFunc = setInterval(() => {
             this.date = this.getTimeWithZone();
             this.setState({
-                hour: {transform: `rotate(${this.clockEngine.getHour(this.date)}deg)`},
-                minute: {transform: `rotate(${this.clockEngine.getMinute(this.date)}deg)`},
-                second: {transform: `rotate(${this.clockEngine.getSecond(this.date)}deg)`},
+                hour: {transform: this.transformStyle(this.date, 'hour')},
+                minute: {transform: this.transformStyle(this.date, 'minute')},
+                second: {transform: this.transformStyle(this.date)},
             });
         }, this.interval)
     }
@@ -36,11 +56,11 @@ export default class Watch extends Component {
     }
 
     componentDidMount() {
-        this.clock();
+        this.intervalHandler('start');
     }
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        this.intervalHandler();
     }
 
     render() {
