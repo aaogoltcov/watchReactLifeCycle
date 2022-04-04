@@ -8,23 +8,19 @@ export default class Watch extends Component {
         this.clockEngine = new ClockEngine();
         this.date = this.getTimeWithZone();
         this.state = {
-            hour: {transform: this.transformStyle(this.date, 'hour')},
-            minute: {transform: this.transformStyle(this.date, 'minute')},
-            second: {transform: this.transformStyle(this.date)},
+            hour: {},
+            minute: {},
+            second: {},
         }
         this.interval = 1000;
     }
 
-    transformStyle(date, type='second') {
-        if (type === 'hour') {
-            return `rotate(${this.clockEngine.getHour(date)}deg)`;
-        } else if (type === 'minute') {
-            return `rotate(${this.clockEngine.getMinute(date)}deg)`;
-        } else if (type === 'second') {
-            return `rotate(${this.clockEngine.getSecond(date)}deg)`;
-        } else {
-            console.log('Error with transform style date type');
-        }
+    updateClockTransformStyle(date) {
+        this.setState({
+            hour: {transform: `rotate(${this.clockEngine.getHour(date)}deg)`},
+            minute: {transform: `rotate(${this.clockEngine.getMinute(date)}deg)`},
+            second: {transform: `rotate(${this.clockEngine.getSecond(date)}deg)`},
+        });
     }
 
     getTimeWithZone() {
@@ -42,11 +38,7 @@ export default class Watch extends Component {
     clock() {
         this.intervalFunc = setInterval(() => {
             this.date = this.getTimeWithZone();
-            this.setState({
-                hour: {transform: this.transformStyle(this.date, 'hour')},
-                minute: {transform: this.transformStyle(this.date, 'minute')},
-                second: {transform: this.transformStyle(this.date)},
-            });
+            this.updateClockTransformStyle(this.date);
         }, this.interval)
     }
 
