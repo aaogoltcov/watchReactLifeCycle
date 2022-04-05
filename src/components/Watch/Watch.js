@@ -15,7 +15,7 @@ export default class Watch extends Component {
         this.interval = 1000;
     }
 
-    updateClockTransformStyle(date) {
+    updateClock(date) {
         this.setState({
             hour: {transform: `rotate(${this.clockEngine.getHour(date)}deg)`},
             minute: {transform: `rotate(${this.clockEngine.getMinute(date)}deg)`},
@@ -38,13 +38,13 @@ export default class Watch extends Component {
     clock() {
         this.intervalFunc = setInterval(() => {
             this.date = this.getTimeWithZone();
-            this.updateClockTransformStyle(this.date);
+            this.updateClock(this.date);
         }, this.interval)
     }
 
-    deleteButtonHandler = event => {
+    deleteButtonHandler(event) {
         event.preventDefault();
-        this.props.deleteFunc(this._reactInternals.key);
+        this.props.deleteClock(this._reactInternals.key);
     }
 
     componentDidMount() {
@@ -63,7 +63,7 @@ export default class Watch extends Component {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={this.deleteButtonHandler}
+                    onClick={this.deleteButtonHandler.bind(this)}
                 >Удалить
                 </button>
                 <div className="clock">

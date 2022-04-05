@@ -11,7 +11,7 @@ export default class Container extends Component{
                 key: shortid.generate(),
                 zone: undefined,
                 name: undefined,
-                deleteFunc: this.deleteItem,
+                deleteClock: this.deleteClock.bind(this),
             }]
         }
     }
@@ -21,11 +21,11 @@ export default class Container extends Component{
             key={clock.key}
             zone={clock.zone}
             name={clock.name}
-            deleteFunc={this.deleteItem}
+            deleteClock={this.deleteClock.bind(this)}
         />)
     }
 
-    deleteItem = key => {
+    deleteClock(key) {
         let newListOfClocks = [];
         for (let item of this.state.listOfClocks) {
             if (item.key.toString() !== key.toString()) {
@@ -37,12 +37,12 @@ export default class Container extends Component{
         })
     }
 
-    pushNewClockToTheList = (clock) => {
+    addClock(clock) {
         this.state.listOfClocks.push({
             key: clock.key,
             zone: clock.zone,
             name: clock.name,
-            deleteFunc: this.deleteItem,
+            deleteClock: this.deleteClock.bind(this),
         });
         this.setState({
             listOfClocks: this.state.listOfClocks,
@@ -52,7 +52,7 @@ export default class Container extends Component{
     render() {
         return (
             <div>
-                <Form zones={this.props.zones} newClockFunc={this.pushNewClockToTheList}/>
+                <Form zones={this.props.zones} addClock={this.addClock.bind(this)}/>
                 {this.renderClocks()}
             </div>
         );

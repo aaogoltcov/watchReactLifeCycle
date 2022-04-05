@@ -17,30 +17,29 @@ export default class Form extends Component {
         return this.props.zones.map(item => <option key={shortid.generate()} value={item}>{item}</option>);
     }
 
-    selectChangeHandler = event => {
+    selectChangeHandler(event) {
         this.setState({
             zone: event.target.value,
         })
     }
 
-    nameChangeHandler = event => {
+    nameChangeHandler(event) {
         this.setState({
             name: event.target.value,
         })
     }
 
-    clickButtonHandler = event => {
+    clickButtonHandler(event) {
         event.preventDefault();
         if (!this.state.zone || !this.state.name || this.state.zone === this.zoneTemplate) {
             this.setState({
                 error: {display: "block"}
             })
         } else {
-            this.props.newClockFunc({
+            this.props.addClock({
                 key: shortid.generate(),
                 zone: this.state.zone,
                 name: this.state.name,
-                deleteFunc: this.deleteItem,
             })
             this.setState({
                 zone: this.zoneTemplate,
@@ -60,7 +59,7 @@ export default class Form extends Component {
                             <select
                                 className="custom-select mr-sm-2"
                                 id="inlineFormCustomSelect"
-                                onChange={this.selectChangeHandler}
+                                onChange={this.selectChangeHandler.bind(this)}
                                 required={true}
                             >
                                 <option>{this.state.zone || "Выберите зону..."}</option>
@@ -72,14 +71,14 @@ export default class Form extends Component {
                                     className="form-control"
                                     placeholder="Название"
                                     value={this.state.name}
-                                    onChange={this.nameChangeHandler}
+                                    onChange={this.nameChangeHandler.bind(this)}
                                     required={true}
                                 />
                             </div>
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                onClick={this.clickButtonHandler}
+                                onClick={this.clickButtonHandler.bind(this)}
                             >Добавить
                             </button>
                         </div>
